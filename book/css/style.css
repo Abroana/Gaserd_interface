@@ -1,0 +1,56 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Helvetica',sans-serif;
+}
+.main {
+  padding:10px 20px;
+  height: 100%;
+  width: 80%;
+  position: absolute;
+  left:50%;
+  margin-left:-40%;
+  background-color: #fff;
+}
+
+.close_problem {
+  display: inline-block;
+  background-color: #2196F3;
+  padding: 2px 4px;
+}
+.open_problem {
+  display: inline-block;
+  background-color: #F44336;
+  padding: 2px 4px 2px 5px;
+}
+
+
+.list_problem {
+  list-style: none;
+}
+
+.list_problem li {
+  padding:2px 0px;
+  cursor: pointer;
+}
+
+.code {
+  background-color:#c5c5c5;
+  padding:10px 15px;
+
+}
+.fb_iframe_widget {
+  vertical-align: top;
+}
+.footer {
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+}
+
+@media screen and (max-width:698px) {
+    .main {
+      width: 100%;
+      left:0px;
+      margin-left:0px;
+    }
+}

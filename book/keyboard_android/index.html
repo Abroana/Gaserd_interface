@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Book of Mobile Front End Problems</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="main">
+    <h1>Problem:</h1>
+    <p>This is most important problem, but I am see her on Android OS.</p>
+    <h1>Decision:</h1>
+    <p>Not good desicion, but this is work:</p>
+    <div class="code">
+      $('input').on('focus', function() {
+                     if (MobileAdsUtils.getOsName() == 'android') {<br>
+                         $(this).parent().css('padding-bottom','150px');<br>
+                     }<br>
+                 });<br>
+
+             $('input').on('focusout', function() {
+                     if (MobileAdsUtils.getOsName() == 'android') { <br>
+                         $(this).parent().css('padding-bottom','0px');<br>
+                     }<br>
+             })
+    </div>
+    <p>MobileAdsUtils.getOsName - custom function, and 150px - average height of the keyboard</p>
+  </div>
+</body>
+</html>

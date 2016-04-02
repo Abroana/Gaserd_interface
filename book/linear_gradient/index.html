@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Book of Mobile Front End Problems</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="main">
+    <h1>Problem:</h1>
+    <p>linear-gradient in Android OS. example code:</p>
+    <div class="code">
+      .footer {
+        <br>background: #e30a14;
+        <br>background: linear-gradient(to right, #e30a14, #f39100);
+      <br>}
+    </div>
+    <p>But this don't work some devices with Android OS 4.0.3</p>
+    <h1>Decision:</h1>
+    <p>Fix it:</p>
+    <div class="code">
+background: #e30a14;<br>
+background: -webkit-linear-gradient(left, #e30a14, #f39100);<br>
+background: linear-gradient(to right, #e30a14, #f39100);
+    </div>
+    <p>Thanks for help this problem - <a href="https://www.facebook.com/dalimteam" target="_blank">DalimTeam</a></p>
+  </div>
+</body>
+</html>
