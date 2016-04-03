@@ -36,6 +36,10 @@ var _CORE = {
           window.location.search = '?search=' + inputString;
       }
     });
+    $('#search-b_button-js').on('click',function() {
+      var inputString = $('#search-js').val();
+      window.location.search = '?search=' + inputString;
+    });
 
   },
 
