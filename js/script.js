@@ -1,5 +1,4 @@
 
-
 var DATA = {
   responce: {
     search : {}
@@ -9,6 +8,17 @@ var DATA = {
 var _CORE = {
   init : function() {
     var searchString = window.location.search;
+
+    var hashString   = this.hashCode('gaserd' + Math.floor(Math.random() * 101));
+
+    if (!navigator.cookieEnabled) {
+        console.info('Для работы с этим сайтом, мы хотели бы, чтобы Вы в ключили cookie. Спасибо.')
+    }
+    else {
+      if (this.getCookie('hash') == 'undefined') {
+          this.setCookie('hash',hashString,{'expires':0,'path':'/'});
+      }
+    }
 
     $('#search-js').focus();
 
@@ -30,7 +40,7 @@ var _CORE = {
 
     $('#search-js').on('keyup', function(e) {
       if (e.which == 13) {
-          var inputString = $(this).val();
+          var inputString = $(this).val(); 
           window.location.search = '?search=' + inputString;
       }
     });
@@ -39,6 +49,53 @@ var _CORE = {
       window.location.search = '?search=' + inputString;
     });
 
+  },
+
+  hashCode : function(string) {
+    var self = string, range = Array(string.length);
+    for(var i = 0; i < string.length; i++) {
+      range[i] = i;
+    }
+    return Array.prototype.map.call(range, function(i) {
+      return self.charCodeAt(i).toString(16);
+    }).join('');
+  },
+
+  setCookie : function(name, value, options) {
+    options = options || {};
+    var expires = options.expires;
+    if (typeof expires == "number" && expires) {
+      var d = new Date();
+      d.setTime(d.getTime() + expires * 1000);
+      expires = options.expires = d;
+    }
+    if (expires && expires.toUTCString) {
+      options.expires = expires.toUTCString();
+    }
+    value = encodeURIComponent(value);
+    var updatedCookie = name + "=" + value;
+    for (var propName in options) {
+      updatedCookie += "; " + propName;
+      var propValue = options[propName];
+      if (propValue !== true) {
+        updatedCookie += "=" + propValue;
+      }
+    }
+    console.log('[LOG : hashKey ] ' + updatedCookie );
+    document.cookie = updatedCookie;
+  },
+
+  getCookie : function(name) {
+    var matches = document.cookie.match(new RegExp(
+      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+  },
+
+  deleteCookie : function(name) {
+    _CORE.setCookie(name, "", {
+      expires: -1
+    })
   },
 
   checkVariable : function(variable) {
@@ -54,7 +111,7 @@ var _CORE = {
         DRAW.removeLoad();
         DRAW.nullAnswer(string);
       }
-    },'20000');
+    },'25000');
   }
 }
 
@@ -64,8 +121,7 @@ var QUERY = {
       var arg = false;
       if (typeof arguments[1] === 'function')
           arg = arguments[1]
-          //https://vast-bayou-60079.herokuapp.com/api/search/?search=
-      $.get('http://localhost:5000/api/search?search=' + string, function(data) {
+      $.get('https://vast-bayou-60079.herokuapp.com/api/search/?search=' + string + '&hash=' + _CORE.getCookie('hash'), function(data) {
         if (typeof data !== 'undefined') {
             if (data.length !== 0) {
               DATA.responce.search = data;
