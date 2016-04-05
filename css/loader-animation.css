@@ -1,0 +1,58 @@
+/* Импортируем шрифт */
+@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700|PT+Mono);
+
+.main-container {
+  font-family: Lato, sans-serif;
+  padding: 20px 40px;
+}
+
+.main-container {
+  background-color: #4DB6AC;
+  padding: 20px 40px;
+}
+
+.loader-container {
+  border-radius: 5px;
+  box-shadow: 0 8px 12px rgba(0,0,0,0.1);
+  max-width: 500px;
+}
+
+.loader-container__title {
+  background-color: #EFEBEB;
+  border-radius: 5px  5px 0 0;
+  padding: 10px 15px;
+  position: relative;
+}
+
+.loader-container__body {
+  background-color: #fff;
+  border-radius: 0 0 5px 5px;
+  padding: 12px 14px;
+}
+
+.title__header {
+  color: #696969;
+  position: absolute;
+  right: 15px;
+  top: 10px;
+}
+
+.title__circle {
+  border-radius: 5px;
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+}
+
+.title__circle-red {
+  background-color: #DC143C;
+}
+
+.title__circle-yellow {
+  background-color: #FFA500;
+  margin: 0 5px;
+}
+
+.title__circle-green {
+  background-color: #32CD32;
+}
