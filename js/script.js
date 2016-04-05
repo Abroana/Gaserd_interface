@@ -22,9 +22,7 @@ var _CORE = {
       );
       DRAW.redrawSearchBlock();
       DRAW.drawLoad();
-      QUERY.all(objURL.search,'stackoverflow', function() { DRAW.responceSearch(DATA.responce.search.stackoverflow,'stackoverflow') });
-      QUERY.all(objURL.search,'github', function() { DRAW.responceSearch(DATA.responce.search.github,'github') });
-      QUERY.all(objURL.search,'habrhabr', function() { DRAW.responceSearch(DATA.responce.search.habrhabr,'habrhabr') });
+      QUERY.all(objURL.search, function() { DRAW.responceSearch(DATA.responce.search) });
       _CORE.checkResponceServer(decodeURI(objURL.search))
       $('#search-js').val(decodeURI(objURL.search));
 
@@ -56,20 +54,21 @@ var _CORE = {
         DRAW.removeLoad();
         DRAW.nullAnswer(string);
       }
-    },'10000');
+    },'20000');
   }
 }
 
 var QUERY = {
-  all : function(string, type) {
+  all : function(string) {
     if (typeof string !== 'undefined' || typeof type !== 'undefined') {
       var arg = false;
-      if (typeof arguments[2] === 'function')
-          arg = arguments[2]
-      $.get('https://vast-bayou-60079.herokuapp.com/api/search/?search=' + string + '&type=' + type, function(data) {
+      if (typeof arguments[1] === 'function')
+          arg = arguments[1]
+          //https://vast-bayou-60079.herokuapp.com/api/search/?search=
+      $.get('http://localhost:5000/api/search?search=' + string, function(data) {
         if (typeof data !== 'undefined') {
             if (data.length !== 0) {
-              DATA.responce.search[type] = data;
+              DATA.responce.search = data;
               if (arg)
                   arg()
             }
@@ -98,14 +97,16 @@ var DRAW = {
     });
   },
 
-  responceSearch : function(data, type) {
+  responceSearch : function(data) {
     /*
     example answer : {
       question : "Who's your dady?",
       text     : "I am your father",
-      link     : "https://youporn.com"
+      link     : "https://youporn.com",
+      date     : "2011-09-22T11:53:00.000Z"
     }
     */
+    console.log(data)
     if (_CORE.checkVariable(data) == true) {
         var img = {
           'stackoverflow' : 'images/stack.png',
@@ -119,13 +120,14 @@ var DRAW = {
         }
         DRAW.removeLoad();
         for (var i = 0; i < data.length; i++) {
-          var typeClass = (_CORE.checkVariable(type)) ? type : '';
+          var typeClass = (_CORE.checkVariable(data[i].type)) ? data[i].type : '';
           var block  = '<div class="result-b ' + typeClass + ' col-10">';
               block += '<h2>' + data[i].question + '</h2>';
               block += '<p>' + data[i].text + '</p>';
+              block += '<p>' + data[i].date + '</p>';
               block += '<div class="link col-12">';
-              block += '<div class="inline-b-g"><img src="' + img[type] + '"></div>'
-              block += '<div class="col-10 inline-b-g"><a href="' + link[type] + '' + data[i].link + '" target="_blank">' + link[type] + '' + data[i].link + '</a></div>'
+              block += '<div class="inline-b-g"><img src="' + img[data[i].type] + '"></div>'
+              block += '<div class="col-10 inline-b-g"><a href="' + link[data[i].type] + '' + data[i].link + '" target="_blank">' + link[data[i].type] + '' + data[i].link + '</a></div>'
               block += '</div>';
               block += '</div>';
           $('.result-search').append(block);
