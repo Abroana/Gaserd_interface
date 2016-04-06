@@ -120,7 +120,7 @@ var Loader = {
             console.log('Waiting...');
             PauseTyping();
           }
-          else if(rand > 98 && rand < 101){
+          else if(rand > 99 && rand < 101){
             clearInterval(model.iter);
             EraseTyping();
           }
