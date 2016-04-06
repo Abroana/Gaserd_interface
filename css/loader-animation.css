@@ -60,6 +60,10 @@
   padding: 12px 14px;
 }
 
+.body__text {
+  display: inline-block;
+}
+
 .body__cursor {
   border: transparent;
   border-right: 1px solid #546e7a;
@@ -85,3 +89,26 @@
   animation: blinkCursor 1s linear infinite;
 }
 
+.loader-js__reserved-word {
+  color: #D28B93;
+}
+
+.loader-js__basic-code {
+  color: #666;
+}
+
+.loader-js__string {
+  color: #1E90FF;
+}
+
+.loader-js__comment {
+  color: #FFF;
+}
+
+.loader-js__digit {
+  color: #990055;
+}
+
+.loader-js__tab {
+  margin-left: 15px;
+}
