@@ -8,11 +8,21 @@ var Loader = {
     letters: [],
     output: [],
     delay: 100,
-    i: 0
+    i: 0,
+    container: 'body'
   },
   
   Init: function(options){
     var div = '';
+    //Устанавливаем значения
+    this.Model.i = 0;
+    this.Model.letters = [];
+    this.Model.output = [];
+    this.Model.iter = 0;
+    this.Model.delay = options.delay || 100;
+    this.Model.text = options.text || 'Empty string';
+    this.Model.container = options.container || 'body'; 
+    
     div = '<div class="loader-container">';
       div += '<div class="loader-container__title">';
         div += '<div class="title__circle title__circle-red"></div>'
@@ -25,16 +35,8 @@ var Loader = {
         div += '<div class="body__cursor"></div></div>'
       div += '</div>';
     div += '</div>';
-    $('.main-container').empty();
-    $('.main-container').html(div);
-    
-    //Устанавливаем значения
-    this.Model.i = 0;
-    this.Model.letters = [];
-    this.Model.output = [];
-    this.Model.iter = 0;
-    this.Model.delay = options.delay || 100;
-    this.Model.text = options.text || 'Empty string';
+    $(this.Model.container).empty();
+    $(this.Model.container).html(div);
     
     this.Draw();
   },
@@ -206,8 +208,8 @@ var Loader = {
 }
 
 Loader.Init({text: "function randomInteger(min, max) {\
-    #var rand = min + Math.random() * (max + 1 - min);\
-    #rand = Math.floor(rand);\
-    #return rand;\
-  }\
-alert(randomInteger('Hello word!'))"});
+          #var rand = min + Math.random() * (max + 1 - min);\
+          #rand = Math.floor(rand);\
+          #return rand;\
+        }\
+      alert(randomInteger('Hello word!'))", container: '.main-container'});

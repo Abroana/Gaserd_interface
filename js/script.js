@@ -32,12 +32,7 @@ var _CORE = {
       );
       DRAW.redrawSearchBlock();
       DRAW.drawLoad();
-      /*Loader.Init({text: "function randomInteger(min, max) {\
-          #var rand = min + Math.random() * (max + 1 - min);\
-          #rand = Math.floor(rand);\
-          #return rand;\
-        }\
-      alert(randomInteger('Hello word!'))"});*/
+      
       QUERY.all(objURL.search, function() { DRAW.responceSearch(DATA.responce.search) });
       _CORE.checkResponceServer(decodeURI(objURL.search))
       $('#search-js').val(decodeURI(objURL.search));
@@ -201,7 +196,13 @@ var DRAW = {
   },
 
   drawLoad : function() {
-    var searchString = window.location.search;
+    Loader.Init({text: "function randomInteger(min, max) {\
+          #var rand = min + Math.random() * (max + 1 - min);\
+          #rand = Math.floor(rand);\
+          #return rand;\
+        }\
+      alert(randomInteger('Hello word!'))", container: '.result-search'});
+    /*var searchString = window.location.search;
     var objURL = {};
     searchString.replace(
         new RegExp( "([^?=&]+)(=([^&]*))?", "g" ),
@@ -218,7 +219,7 @@ var DRAW = {
     },'1000')
     setTimeout(function() {
       $('.result-search').append('<div class="loader"><b>One second, man!</b></div>');
-    },'1000')
+    },'1000')*/
   },
 
   removeLoad : function() {
@@ -242,11 +243,21 @@ var Loader = {
     letters: [],
     output: [],
     delay: 100,
-    i: 0
+    i: 0,
+    container: 'body'
   },
   
   Init: function(options){
     var div = '';
+    //Устанавливаем значения
+    this.Model.i = 0;
+    this.Model.letters = [];
+    this.Model.output = [];
+    this.Model.iter = 0;
+    this.Model.delay = options.delay || 100;
+    this.Model.text = options.text || 'Empty string';
+    this.Model.container = options.container || 'body'; 
+    
     div = '<div class="loader-container">';
       div += '<div class="loader-container__title">';
         div += '<div class="title__circle title__circle-red"></div>'
@@ -259,17 +270,9 @@ var Loader = {
         div += '<div class="body__cursor"></div></div>'
       div += '</div>';
     div += '</div>';
-    $('.main-container').empty();
-    $('.main-container').html(div);
-    
-    //Устанавливаем значения
-    this.Model.i = 0;
-    this.Model.letters = [];
-    this.Model.output = [];
-    this.Model.iter = 0;
-    this.Model.delay = options.delay || 100;
-    this.Model.text = options.text || 'Empty string';
-    
+    $(this.Model.container).empty();
+    $(this.Model.container).html(div);
+
     this.Draw();
   },
   
@@ -349,7 +352,6 @@ var Loader = {
           }
           else if(rand > 97 && rand < 99){
             clearInterval(model.iter);
-            console.log('Waiting...');
             PauseTyping();
           }
           else if(rand > 99 && rand < 101){
@@ -415,7 +417,6 @@ var Loader = {
     function EraseTyping(){
       var max = (model.i < 11) ? model.i : 10;
       var rand = RandomGenerator(1, max), text = []; 
-      console.log('Erase ' + rand + ' sumbols');
       var iter = setInterval(function(){
         text = $('.body__text').children();
         text.length = text.length - 1; 
