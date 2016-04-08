@@ -1,7 +1,7 @@
 var Loader = {
   
   Model: {
-    reservedJS: ['break', 'default', 'function', 'return', 'var', 'case', 'delete', 'if', 'switch', 'void', 'catch', 'do', 'in', 'this', 'while', 'const', 'else', 'throw', 'with', 'continue', 'finally', 'let', 'try', 'debugger', 'for', 'new', 'typeof', 'class', 'enum', 'export', 'extends', 'import', 'super', 'implements', 'interface', 'package', 'private', 'protected', 'public', 'static', 'yield'],
+    reservedJS: ['break', 'default', 'function', 'return', 'var', 'case', 'delete', 'if', 'switch', 'void', 'catch', 'do', 'in', 'this', 'while', 'const', 'else', 'throw', 'with', 'continue', 'finally', 'let', 'try', 'debugger', 'for', 'new', 'typeof', /*'class',*/ 'enum', 'export', 'extends', 'import', 'super', 'implements', 'interface', 'package', 'private', 'protected', 'public', 'static', 'yield'],
     stopSymbols: ['#', ';', '\'', '"', '{', ',', '.', ':', '=', '!', '?', '(', ')', '}', '[', ']', '/', '*', '-', '+', '$', '_', '/', '\\', '&', '||', '^', '|' ],
     iter: 0,
     text: '',
@@ -46,62 +46,60 @@ var Loader = {
     model.i = 0;
     $('.body__cursor').removeClass('body__cursor--waiting');
     ParseCode(model.text);
-    //Run(model.letters, model.i, model.delay);
+    
+    //заменяем по регуляркам
+    function ReplaceByRegExp(text, type){
+      var res = [], regExp, matching, i;
+      switch(type){
+        case 'reserved':
+          regExp = model.reservedJS.join('\\b)+|(\\b');
+          regExp = '(\\b' + regExp + '\\b)';
+          regExp = new RegExp(regExp, 'gm');
+        break;
+        case 'string':
+          regExp = /\'.+?\'/gm;
+        break;
+        case 'digit':
+          regExp = /\d+/gm;
+        break; 
+        case 'symbols':
+          regExp = /[\(\)\*\.\=\+\-\[\]!\?\|&\^]/gm;
+        break; 
+        case 'basic':
+          regExp = /<[^>]+?>.*?<\/[^>]+?>/gm
+      }
+      if(type === 'basic'){
+        matching = text.split(regExp) || [];
+        for(i = 0; i < matching.length; i++)
+          if(matching[i].length > 0){
+            regExp = matching[i];
+            text = text.replace(regExp, Wrap(matching[i], type));
+          }
+      }
+      else if(type === 'string'){
+        matching = text.match(regExp) || [];
+        for(i = 0; i < matching.length; i++)
+          if(matching[i].length > 0)
+            text = text.replace(regExp, Wrap(matching[i], type));
+      }
+      else {
+        matching = text.match(regExp) || [];
+        for(i = 0; i < matching.length; i++)
+          if(matching[i].length > 0){
+            regExp = new RegExp('\\b' + matching[i] + '\\b', 'gm');
+            text = text.replace(regExp, Wrap(matching[i], type));
+          }
+      }
+      return text;
+    }
     
     //парсим строку
     function ParseCode(text){
-      var i, word = '', type = '', index = 0, start, res = [];
-      var wordArray = text.split(/\b\.*\b/igm);
-      for(i = 0; i < wordArray.length; i++){
-        if(model.reservedJS.indexOf(wordArray[i]) > -1)
-          res = res.concat(Wrap(wordArray[i], 'reserved'));
-        else if($.isNumeric(wordArray[i]))
-          res = res.concat(Wrap(wordArray[i], 'digit'));
-        else  
-          res = res.concat(Wrap(wordArray[i], ''));
+      var types = ['reserved', 'string', 'digit', 'basic'], i;
+      for(i = 0; i < types.length; i++){
+        text = ReplaceByRegExp(text, types[i]);
       }
-      for(i = 0; i < res.length; i++){
-        if(res[i].indexOf('#') > -1)
-          res[i] = res[i].replace('#', '<span class="loader-js__tab"></span>');
-        else if(res[i].indexOf('}') > -1)
-          res[i] = res[i].replace('}', '<span class="loader-js__basic-code">}</span><br>');
-        else if(res[i].indexOf('{') > -1)
-          res[i] = res[i].replace('{', '<span class="loader-js__basic-code">{</span><br>');
-        else if(res[i].indexOf(';') > -1)
-          res[i] = res[i].replace(';', '<span class="loader-js__basic-code">;</span><br>');
-      }
-      model.output = res;
-      /*for(i = 0; i < text.length; i++){
-        if(text[i].indexOf(';') > -1)
-          type = 'semicolon';
-        else if(text[i].indexOf('#') > -1)
-          type = 'tab'
-        else  
-          type = 'basic'
-        model.output = model.output.concat(Wrap(text[i], type)); 
-        /*index = model.stopSymbols.indexOf(text[i]);
-        if(index === -1){
-          if(word.length === 0)
-            start = i;
-          word += text[i];
-        }
-        else {
-          if(index === 0)
-            type = 'tab';
-          else if(index === 1)
-            type = 'semicolon';
-          else if($.isNumeric(word)) 
-            type = 'digit';
-          else if(model.reservedJS.indexOf(word) > -1)
-            type = 'reserved';
-          else if((start === 2 && text[i] === '\'') || (start === 3 && text[i] === '"')) 
-            type = 'string';
-          else
-            type = 'basic';
-          model.output = model.output.concat(Wrap(word, type));
-          word = '';
-        }*//*
-      }*/
+      model.output = text.match(/<[^>]+>(.*?<\/[^>]+>)?/gm);
       Run();
     };
     
@@ -136,15 +134,17 @@ var Loader = {
     function Wrap(text, type){
       var i = 0, tag = []
       type = type || '';
-      //model.iter = setInterval(function(){
       while(i < text.length){
         switch(type){
           case 'reserved':
             tag.push('<span class="loader-js__reserved-word">' + text[i] + '</span>');
           break;  
           case 'basic':
-            tag.push('<span class="loader-js__basic-code">' + text[i] + '</span>');
-            if(text[i].indexOf('{') > -1 || text[i].indexOf('}') > -1)
+            if(text[i].indexOf('#') > -1)
+              tag.push('<span class="loader-js__tab"></span>');
+            else
+              tag.push('<span class="loader-js__basic-code">' + text[i] + '</span>');
+            if(text[i].indexOf('{') > -1 || text[i].indexOf('}') > -1 || text[i].indexOf(';') > -1)
               tag.push('<br>');
           break;
           case 'string':
@@ -155,15 +155,9 @@ var Loader = {
           break;  
           case 'digit':
             tag.push('<span class="loader-js__digit">' + text[i] + '</span>');
-          break;  
-          case 'tab':
-            tag.push('<span class="loader-js__tab"></span>');
           break;   
-          case 'nl':
-            tag.push('<br>');
-          break;  
-          case 'semicolon':
-            tag.push('<span class="loader-js__basic-code">;</span><br>')
+          case 'symbols':
+            tag.push('<span class="loader-js__symbols">' + text[i] + '</span>');
           break;  
           default:
             tag.push('<span>' + text[i] + '</span>');
@@ -171,12 +165,7 @@ var Loader = {
         }
         i++;
       }
-      return tag;
-        /*else {
-          clearInterval(model.iter);
-          $('.body__cursor').addClass('body__cursor--waiting');
-        }*/
-      //}, model.delay);
+      return tag.join('');
     };
     
     //задумались при печати
@@ -190,7 +179,7 @@ var Loader = {
     
     //ошиблись, стираем
     function EraseTyping(){
-      var max = (model.i < 16) ? model.i : 15;
+      var max = (model.i < 11) ? model.i : 10;
       var rand = RandomGenerator(1, max), text = []; 
       console.log('Erase ' + rand + ' sumbols');
       var iter = setInterval(function(){
@@ -221,4 +210,4 @@ Loader.Init({text: "function randomInteger(min, max) {\
     #rand = Math.floor(rand);\
     #return rand;\
   }\
-alert(randomInteger(5, 10));"});
+alert(randomInteger('Hello word!'))"});

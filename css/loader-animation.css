@@ -90,7 +90,7 @@
 }
 
 .loader-js__reserved-word {
-  color: #477BAA;
+  color: #D6709F;
 }
 
 .loader-js__basic-code {
@@ -106,9 +106,13 @@
 }
 
 .loader-js__digit {
-  color: #990055;
+  color: #6991FD;
 }
 
 .loader-js__tab {
   margin-left: 15px;
+}
+
+.loader-js__symbols {
+  color: #9999A8;
 }
