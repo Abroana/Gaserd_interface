@@ -222,8 +222,124 @@ button, input, a {
 	width:99.9996%;
 }
 
+/************* Loader *************/
+.main-container {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 20px 40px;
+}
 
+.main-container {
+  background-color: #4DB6AC;
+  padding: 20px 40px;
+}
 
+.loader-container {
+  border-radius: 5px;
+  box-shadow: 0 8px 12px rgba(0,0,0,0.1);
+  max-width: 500px;
+  margin: auto;
+}
+
+.loader-container__title {
+  background-color: #EFEBEB;
+  border-radius: 5px  5px 0 0;
+  padding: 10px 15px;
+  position: relative;
+}
+
+.title__header {
+  color: #696969;
+  position: absolute;
+  right: 15px;
+  top: 10px;
+}
+
+.title__circle {
+  border-radius: 5px;
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+}
+
+.title__circle-red {
+  background-color: #DC143C;
+}
+
+.title__circle-yellow {
+  background-color: #FFA500;
+  margin: 0 5px;
+}
+
+.title__circle-green {
+  background-color: #32CD32;
+}
+
+.loader-container__body {
+  background-color: #fff;
+  border-radius: 0 0 5px 5px;
+  height: 250px;
+  overflow-y: scroll;
+  padding: 12px 14px;
+}
+
+.body__text {
+  display: inline-block;
+}
+
+.body__cursor {
+  border: transparent;
+  border-right: 1px solid #546e7a;
+  box-shadow: 1px 0px 0px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  height: 15px;
+  margin: 0 0 -1px 2px;
+}
+
+/* Мигание курсора */
+@keyframes blinkCursor {
+  0% { opacity: 1 }
+  
+  50% { opacity: 1 }
+  
+  55% { opacity: 0 }
+  
+  100% { opacity: 0 }
+}
+
+.body__cursor--waiting{
+  -webkit-animation: blinkCursor 1s linear infinite;
+  animation: blinkCursor 1s linear infinite;
+}
+
+.loader-js__reserved-word {
+  color: #D6709F;
+}
+
+.loader-js__basic-code {
+  color: #666;
+}
+
+.loader-js__string {
+  color: #A0A943;
+}
+
+.loader-js__comment {
+  color: #FFF;
+}
+
+.loader-js__digit {
+  color: #6991FD;
+}
+
+.loader-js__tab {
+  margin-left: 15px;
+}
+
+.loader-js__symbols {
+  color: #9999A8;
+}
+
+/************* Loader *************/
 
 @media screen and (max-width:978px) {
   .search-b {
