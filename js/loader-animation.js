@@ -19,7 +19,7 @@ var Loader = {
     this.Model.letters = [];
     this.Model.output = [];
     this.Model.iter = 0;
-    this.Model.delay = options.delay || 100;
+    this.Model.delay = options.delay || 70;
     this.Model.text = options.text || 'Empty string';
     this.Model.container = options.container || 'body'; 
     

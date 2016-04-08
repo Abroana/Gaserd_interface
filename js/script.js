@@ -223,7 +223,8 @@ var DRAW = {
   },
 
   removeLoad : function() {
-    $('.loader').remove();
+    //$('.loader').remove();
+    $('.loader-container').remove();
   },
 
   nullAnswer : function(string) {
@@ -254,11 +255,11 @@ var Loader = {
     this.Model.letters = [];
     this.Model.output = [];
     this.Model.iter = 0;
-    this.Model.delay = options.delay || 100;
+    this.Model.delay = options.delay || 70;
     this.Model.text = options.text || 'Empty string';
     this.Model.container = options.container || 'body'; 
     
-    div = '<div class="loader-container">';
+    div = '<div class="loader-container col-10">';
       div += '<div class="loader-container__title">';
         div += '<div class="title__circle title__circle-red"></div>'
         div += '<div class="title__circle title__circle-yellow"></div>'
